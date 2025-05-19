@@ -4,6 +4,7 @@
 
 [build.environment]
   NODE_VERSION = "18"
+  SHEETDB_API_URL = ""
 
 [[plugins]]
   package = "./netlify-plugin-env-replace.js"
