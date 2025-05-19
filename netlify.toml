@@ -7,7 +7,7 @@
   SHEETDB_API_URL = ""
 
 [[plugins]]
-  package = "./netlify-plugin-env-replace.js"
+  package = "./netlify-plugin-env-replace"
 
 [[redirects]]
   from = "/*"
