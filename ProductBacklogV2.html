@@ -4,6 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Product Backlog</title>
+  <link rel="stylesheet" href="static/css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
     * {
       box-sizing: border-box;
@@ -12,7 +14,7 @@
     
     body {
       margin: 0;
-      padding: 20px;
+      padding: 0;
       background-color: #f5f7fa;
     }
     
@@ -27,6 +29,7 @@
       gap: 20px;
       max-width: 1400px;
       margin: 0 auto;
+      padding: 20px;
     }
     
     .backlog-main {
@@ -239,35 +242,46 @@
     
     .priority-high {
       color: #e74c3c;
+      font-weight: bold;
     }
     
     .priority-medium {
       color: #f39c12;
-    }
-
-
-    .priority-most {
       font-weight: bold;
     }
-    .priority-Most{
+    
+    .priority-low {
+      color: #2ecc71;
       font-weight: bold;
     }
-   
+    
+    .priority-most-urgent {
+      color: #c0392b;
+      font-weight: bold;
+    }
+    
+    .priority-most-important {
+      color: #8e44ad;
+      font-weight: bold;
+    }
+    
+    .priority-most-urgent-and-important {
+      color: #c0392b;
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    
     .important {
       color: #2ecc71;
-
     }
+    
     .urgent {
       color: #1612f3;
-
     }
-    .and{
+    
+    .and {
       color: #e74c3c;
     }
-    
-
-
-    
     
     /* Modal styles */
     .modal {
@@ -357,27 +371,14 @@
       margin-top: 20px;
     }
     
-    @media (max-width: 900px) {
-      .backlog-header, .backlog-item {
-        flex-wrap: wrap;
-      }
-      
-      .backlog-header .priority,
-      .backlog-header .estimate,
-      .backlog-header .ready,
-      .backlog-header .actions,
-      .backlog-item .priority,
-      .backlog-item .estimate,
-      .backlog-item .ready,
-      .backlog-item .actions {
-        width: auto;
-        flex: 1;
-        text-align: left;
-        margin-top: 5px;
-      }
-      
-      .form-row {
+    @media (max-width: 1200px) {
+      .backlog-container {
         flex-direction: column;
+      }
+      
+      .add-item-form {
+        width: 100%;
+        position: static;
       }
     }
     
@@ -402,7 +403,14 @@
   </style>
 </head>
 <body>
-  <h1>Simple Product Backlog</h1>
+  <div class="nav-buttons">
+    <a href="index.html" class="nav-button" data-tooltip="Home"><i class="fas fa-home"></i></a>
+    <a href="kpi.html" class="nav-button" data-tooltip="KPI Dashboard"><i class="fas fa-chart-line"></i></a>
+    <a href="mykanban.html" class="nav-button" data-tooltip="Sprint Board"><i class="fas fa-running"></i></a>
+    <a href="ProductBacklogV2.html" class="nav-button active" data-tooltip="Product Backlog"><i class="fas fa-list"></i></a>
+  </div>
+
+  <h1>Product Backlog</h1>
   
   <div class="backlog-container">
     <div class="backlog-main">
@@ -498,7 +506,6 @@
             <option value="Most Urgent">Most Urgent</option>
             <option value="Most Important">Most Important</option>
             <option value="Most Urgent and Important">Most Urgent and Important</option>
-         
           </select>
         </div>
       </div>

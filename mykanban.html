@@ -4,24 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Simple Sprint Kanban Board</title>
+  <link rel="stylesheet" href="static/css/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
   <style>
-    * {
-      box-sizing: border-box;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    }
-    
-    body {
-      margin: 0;
-      padding: 20px;
-      background-color: #f5f7fa;
-    }
-    
-    h1 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 20px;
-    }
-    
+    /* Sprint Board specific styles */
     .kanban-board {
       display: flex;
       gap: 20px;
@@ -211,167 +197,7 @@
       background-color: #c0392b;
     }
 
-    .modal {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-      z-index: 1000;
-      justify-content: center;
-      align-items: center;
-    }
-    
-    .modal-content {
-      background-color: white;
-      padding: 20px;
-      border-radius: 5px;
-      width: 90%;
-      max-width: 600px;
-      max-height: 90vh;
-      overflow-y: auto;
-      position: relative;
-      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-    }
-    
-    .modal-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid #eee;
-    }
-    
-    .modal-title {
-      margin: 0;
-      font-size: 20px;
-      color: #2c3e50;
-    }
-    
-    .close-modal {
-      background: none;
-      border: none;
-      font-size: 24px;
-      cursor: pointer;
-      color: #7f8c8d;
-      padding: 0;
-      line-height: 1;
-    }
-    
-    .close-modal:hover {
-      color: #34495e;
-    }
-    
-    .deep-criteria {
-      margin-bottom: 20px;
-    }
-    
-    .deep-criteria h3 {
-      margin-top: 0;
-      color: #2c3e50;
-      font-size: 18px;
-    }
-    
-    .deep-criteria p {
-      color: #7f8c8d;
-      margin-bottom: 20px;
-    }
-    
-    .criteria-group {
-      margin-bottom: 15px;
-    }
-    
-    .criteria-group label {
-      display: block;
-      margin-bottom: 5px;
-      font-weight: 500;
-      color: #2c3e50;
-    }
-    
-    .criteria-group textarea {
-      width: 100%;
-      min-height: 80px;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 3px;
-      resize: vertical;
-      font-family: inherit;
-      font-size: 14px;
-    }
-    
-    .criteria-group select {
-      width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 3px;
-      font-family: inherit;
-      font-size: 14px;
-      background-color: white;
-    }
-    
-    .modal-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      margin-top: 20px;
-      padding-top: 15px;
-      border-top: 1px solid #eee;
-    }
-    
-    .modal-actions button {
-      padding: 8px 16px;
-      border: none;
-      border-radius: 3px;
-      cursor: pointer;
-      font-size: 14px;
-      font-weight: 500;
-      transition: background-color 0.2s;
-    }
-    
-    .modal-actions .btn-primary {
-      background-color: #3498db;
-      color: white;
-    }
-    
-    .modal-actions .btn-primary:hover {
-      background-color: #2980b9;
-    }
-    
-    .modal-actions .btn-secondary {
-      background-color: #95a5a6;
-      color: white;
-    }
-    
-    .modal-actions .btn-secondary:hover {
-      background-color: #7f8c8d;
-    }
-
-    .view-details {
-      padding: 20px;
-    }
-    
-    .detail-row {
-      margin-bottom: 15px;
-    }
-    
-    .detail-row strong {
-      display: block;
-      color: #2c3e50;
-      margin-bottom: 5px;
-    }
-    
-    .detail-row p {
-      margin: 0;
-      padding: 10px;
-      background-color: #f8f9fa;
-      border-radius: 4px;
-      white-space: pre-wrap;
-    }
-
-    /* Add tooltip styles */
+    /* Tooltip styles */
     .tooltip {
       position: absolute;
       background-color: white;
@@ -411,15 +237,16 @@
       margin-top: 2px;
       white-space: pre-wrap;
     }
-
-    /* Position the tooltip relative to the task */
-    .task {
-      position: relative;
-    }
   </style>
 </head>
 <body>
-  <h1>Simple Sprint Board</h1>
+  <div class="nav-buttons">
+    <a href="index.html" class="nav-button" data-tooltip="Home"><i class="fas fa-home"></i></a>
+    <a href="kpi.html" class="nav-button" data-tooltip="KPI Dashboard"><i class="fas fa-chart-line"></i></a>
+    <a href="mykanban.html" class="nav-button active" data-tooltip="Sprint Board"><i class="fas fa-running"></i></a>
+    <a href="ProductBacklogV2.html" class="nav-button" data-tooltip="Product Backlog"><i class="fas fa-list"></i></a>
+  </div>
+  <h1>Simple Sprint Kanban Board</h1>
   <h4 style="text-align:right; margin-right: 20px;">Sprint 0 - 15/05/2025 - 20/05/2025</h4>
   
   <div style="text-align: right; margin: 0 20px 20px 0;">
