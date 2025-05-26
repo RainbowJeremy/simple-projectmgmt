@@ -1,0 +1,793 @@
+{% extends "base.html" %}
+
+{% block title %}Fintan's Sprint Board - {{ super() }}{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        background-color: #fafbfc;
+        padding: 20px;
+    }
+
+    h1 {
+        text-align: center;
+        color: #172b4d;
+        margin-bottom: 10px;
+    }
+
+    .sprint-info {
+        text-align: center;
+        color: #5e6c84;
+        margin-bottom: 30px;
+    }
+
+    .board-header {
+        background: linear-gradient(135deg, #0052cc 0%, #0747a6 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 30px;
+        text-align: center;
+    }
+
+    .board-header h2 {
+        margin: 0;
+        font-size: 28px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 15px;
+    }
+
+    .board-header .subtitle {
+        opacity: 0.9;
+        margin-top: 10px;
+        font-size: 16px;
+    }
+
+    .kanban-board {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .column {
+        background-color: #ebecf0;
+        border-radius: 8px;
+        width: 350px;
+        min-height: 600px;
+        padding: 20px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .column-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid #dfe1e6;
+    }
+
+    .column-header h3 {
+        font-size: 18px;
+        color: #172b4d;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .count {
+        background-color: #0052cc;
+        color: white;
+        border-radius: 20px;
+        padding: 4px 12px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .task-list {
+        min-height: 500px;
+        padding: 5px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+
+    .task-list.drag-over {
+        background-color: #e6f2ff;
+        border: 2px dashed #0052cc;
+    }
+
+    .task {
+        background-color: white;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        padding: 15px;
+        margin-bottom: 12px;
+        cursor: grab;
+        position: relative;
+        border-left: 4px solid #0052cc;
+        transition: all 0.2s;
+    }
+
+    .task:hover {
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        transform: translateY(-1px);
+    }
+
+    .task.dragging {
+        opacity: 0.6;
+        transform: rotate(3deg);
+    }
+
+    .task.priority-high {
+        border-left-color: #de350b;
+    }
+
+    .task.priority-medium {
+        border-left-color: #ff8b00;
+    }
+
+    .task.priority-low {
+        border-left-color: #36b37e;
+    }
+
+    .task-title {
+        font-weight: 600;
+        color: #172b4d;
+        margin-bottom: 10px;
+        line-height: 1.4;
+        font-size: 16px;
+    }
+
+    .task-description {
+        color: #5e6c84;
+        font-size: 14px;
+        margin-bottom: 12px;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .task-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        color: #6b778c;
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid #f4f5f7;
+    }
+
+    .task-priority {
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .priority-high {
+        background-color: #ffebe6;
+        color: #de350b;
+    }
+
+    .priority-medium {
+        background-color: #fff4e6;
+        color: #ff8b00;
+    }
+
+    .priority-low {
+        background-color: #e3fcef;
+        color: #00875a;
+    }
+
+    .task-points {
+        background-color: #dfe1e6;
+        color: #5e6c84;
+        padding: 4px 8px;
+        border-radius: 4px;
+        font-weight: 600;
+        font-size: 12px;
+    }
+
+    .delete-btn {
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: none;
+        border: none;
+        color: #97a0af;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        font-size: 14px;
+        opacity: 0;
+        transition: all 0.2s;
+    }
+
+    .task:hover .delete-btn {
+        opacity: 1;
+    }
+
+    .delete-btn:hover {
+        background-color: #de350b;
+        color: white;
+    }
+
+    .signoff-btn {
+        position: absolute;
+        top: 8px;
+        right: 32px;
+        background: none;
+        border: none;
+        color: #97a0af;
+        cursor: pointer;
+        padding: 4px;
+        border-radius: 4px;
+        font-size: 14px;
+        opacity: 0;
+        transition: all 0.2s;
+    }
+
+    .task:hover .signoff-btn {
+        opacity: 1;
+    }
+
+    .signoff-btn:hover {
+        background-color: #36b37e;
+        color: white;
+    }
+
+    .completed-mark {
+        position: absolute;
+        top: 8px;
+        right: 60px;
+        font-size: 14px;
+        display: inline-block;
+    }
+
+    /* Update to make checkmark always visible */
+    .task .completed-mark {
+        opacity: 1; /* Always visible */
+        position: absolute;
+        top: 15px; /* Move down to be more visible */
+        right: 40px;
+        font-size: 16px; /* Slightly larger */
+    }
+
+    /* Better visibility for completed mark */
+    .task .completed-mark {
+        opacity: 1 !important;
+        position: absolute;
+        top: 12px;
+        right: 65px; /* Move further left to avoid button overlap */
+        font-size: 18px;
+        z-index: 10; /* Ensure it's above other elements */
+        pointer-events: none; /* Don't interfere with clicks */
+        background: white;
+        border-radius: 3px;
+        padding: 2px;
+        box-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    }
+
+    .stats-bar {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+    }
+
+    .stat {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 24px;
+        font-weight: bold;
+        color: #0052cc;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: #5e6c84;
+        text-transform: uppercase;
+        font-weight: 500;
+    }
+
+    .progress-section {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .progress-label {
+        font-size: 14px;
+        color: #172b4d;
+        margin-bottom: 10px;
+        font-weight: 500;
+    }
+
+    .progress-bar {
+        background: #f4f5f7;
+        border-radius: 10px;
+        height: 10px;
+        overflow: hidden;
+        margin-bottom: 10px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        background: linear-gradient(90deg, #0052cc 0%, #0747a6 100%);
+        border-radius: 10px;
+        transition: width 0.5s ease;
+    }
+
+    .progress-text {
+        font-size: 12px;
+        color: #5e6c84;
+        text-align: center;
+    }
+
+    @media (max-width: 768px) {
+        .kanban-board {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .column {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .stats-bar {
+            flex-direction: column;
+            gap: 15px;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-user-circle" style="color: #0052cc;"></i> Fintan's Sprint Board</h1>
+<div class="sprint-info">
+    <p>Current Sprint: Sprint 1 | Duration: 2 weeks | Personal Task Management</p>
+</div>
+
+<div class="board-header">
+    <h2>
+        <i class="fas fa-rocket"></i>
+        Sprint Dashboard
+    </h2>
+    <div class="subtitle">Track your personal progress and manage your tasks</div>
+</div>
+
+<div class="stats-bar">
+    <div class="stat">
+        <div class="stat-number" id="total-tasks">0</div>
+        <div class="stat-label">Total Tasks</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number" id="total-points">0</div>
+        <div class="stat-label">Story Points</div>
+    </div>
+    <div class="stat">
+        <div class="stat-number" id="completed-tasks">0</div>
+        <div class="stat-label">Completed</div>
+    </div>
+</div>
+
+<div class="progress-section">
+    <div class="progress-label">Sprint Progress</div>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-fill" style="width: 0%;"></div>
+    </div>
+    <div class="progress-text" id="progress-text">0% Complete</div>
+</div>
+
+<div class="kanban-board">
+    <div class="column">
+        <div class="column-header">
+            <h3><i class="fas fa-clipboard-list"></i> To Do</h3>
+            <span class="count" id="todo-count">0</span>
+        </div>
+        <div class="task-list" data-status="todo" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+            <!-- Tasks will be loaded here -->
+        </div>
+    </div>
+    
+    <div class="column">
+        <div class="column-header">
+            <h3><i class="fas fa-cog fa-spin"></i> In Progress</h3>
+            <span class="count" id="doing-count">0</span>
+        </div>
+        <div class="task-list" data-status="doing" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+            <!-- Tasks will be loaded here -->
+        </div>
+    </div>
+    
+    <div class="column">
+        <div class="column-header">
+            <h3><i class="fas fa-check-circle"></i> Done</h3>
+            <span class="count" id="done-count">0</span>
+        </div>
+        <div class="task-list" data-status="done" ondrop="drop(event)" ondragover="allowDrop(event)" ondragleave="dragLeave(event)">
+            <!-- Tasks will be loaded here -->
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Configuration
+    const API_BASE_URL = 'http://localhost:8000/api';
+    const ASSIGNEE = 'fintan';
+    
+    // Global state
+    let tasks = [];
+    let isConnected = false;
+
+    // API Functions
+    async function apiRequest(endpoint, options = {}) {
+        try {
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                },
+                ...options
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('API Request failed:', error);
+            throw error;
+        }
+    }
+
+    async function loadTasks() {
+        try {
+            console.log(`Loading tasks for ${ASSIGNEE}...`);
+            const allTasks = await apiRequest('/tasks');
+            
+            // Filter tasks for this assignee
+            tasks = allTasks.filter(task => task.assignee === ASSIGNEE);
+            console.log(`Loaded ${tasks.length} tasks for ${ASSIGNEE}:`, tasks);
+            
+            renderTasks();
+            updateStats();
+            updateProgress();
+        } catch (error) {
+            console.error('Failed to load tasks:', error);
+            showError('Failed to load tasks from backend');
+        }
+    }
+
+    async function updateTask(taskId, updates) {
+        try {
+            const updatedTask = await apiRequest(`/tasks/${taskId}`, {
+                method: 'PUT',
+                body: JSON.stringify(updates)
+            });
+            console.log('Updated task:', updatedTask);
+            await loadTasks(); // Refresh tasks
+            showSuccess('Task updated successfully');
+            return updatedTask;
+        } catch (error) {
+            console.error('Failed to update task:', error);
+            showError('Failed to update task');
+            throw error;
+        }
+    }
+
+    async function deleteTask(taskId) {
+        try {
+            await apiRequest(`/tasks/${taskId}`, {
+                method: 'DELETE'
+            });
+            console.log('Deleted task:', taskId);
+            await loadTasks(); // Refresh tasks
+            showSuccess('Task deleted successfully');
+        } catch (error) {
+            console.error('Failed to delete task:', error);
+            showError('Failed to delete task');
+            throw error;
+        }
+    }
+
+    // UI Functions
+    function renderTasks() {
+        // Clear all task lists
+        document.querySelectorAll('.task-list').forEach(list => {
+            list.innerHTML = '';
+        });
+
+        // Group tasks by status
+        const tasksByStatus = {
+            todo: tasks.filter(task => task.status === 'todo'),
+            doing: tasks.filter(task => task.status === 'doing'),
+            done: tasks.filter(task => task.status === 'done')
+        };
+
+        // Render tasks in each column
+        Object.entries(tasksByStatus).forEach(([status, statusTasks]) => {
+            const taskList = document.querySelector(`[data-status="${status}"]`);
+            
+            // DEBUG: Log tasks in each column
+            console.log(`DEBUG - Rendering ${status} column with ${statusTasks.length} tasks:`, statusTasks.map(t => `${t.title} (${t.status})`));
+            
+            if (statusTasks.length === 0) {
+                const emptyMessage = document.createElement('div');
+                emptyMessage.style.cssText = `
+                    text-align: center;
+                    color: #97a0af;
+                    padding: 40px 20px;
+                    font-style: italic;
+                `;
+                emptyMessage.textContent = `No ${status === 'doing' ? 'in progress' : status} tasks`;
+                taskList.appendChild(emptyMessage);
+            } else {
+                statusTasks.forEach(task => {
+                    const taskElement = createTaskElement(task);
+                    taskList.appendChild(taskElement);
+                });
+            }
+        });
+
+        updateTaskCounts();
+    }
+
+    function createTaskElement(task) {
+        console.log(`=== CREATING TASK ELEMENT FOR: ${task.title} with status: ${task.status} ===`);
+        
+        const taskDiv = document.createElement('div');
+        taskDiv.className = `task priority-${task.priority}`;
+        taskDiv.draggable = true;
+        taskDiv.dataset.taskId = task.id;
+        
+        // Add sign-off button only for tasks in "done" status
+        const signoffButton = task.status === 'done' 
+            ? `<button class="signoff-btn" onclick="handleSignoffTask(${task.id})" title="Sign off task as completed">
+                   <i class="fas fa-check"></i>
+               </button>`
+            : '';
+        
+        // Add completed checkmark for done tasks
+        console.log(`About to check if task status === 'done'. Task status is: "${task.status}"`);
+        const completedMark = task.status === 'done' ? '<span class="completed-mark" title="Completed">✅</span>' : '';
+        console.log(`Condition result - completedMark is: "${completedMark}"`);
+        
+        // DEBUG: Log checkmark creation
+        console.log(`DEBUG - Task: ${task.title}, Status: "${task.status}", CompletedMark: "${completedMark}"`);
+        
+        // Debug logging
+        if (task.status === 'done') {
+            console.log(`Creating done task element for: ${task.title} (ID: ${task.id}), adding sign-off button`);
+        }
+        
+        taskDiv.innerHTML = `
+            <button class="delete-btn" onclick="handleDeleteTask(${task.id})">
+                <i class="fas fa-times"></i>
+            </button>
+            ${signoffButton}
+            ${completedMark}
+            <div class="task-title">${escapeHtml(task.title)}</div>
+            ${task.description ? `<div class="task-description">${escapeHtml(task.description)}</div>` : ''}
+            <div class="task-meta">
+                <span class="task-priority priority-${task.priority}">${task.priority}</span>
+                <span class="task-points">${task.story_points || 0} pts</span>
+            </div>
+        `;
+
+        // DEBUG: Check if checkmark is actually in the HTML
+        if (task.status === 'done') {
+            console.log(`DEBUG - HTML for done task "${task.title}":`, taskDiv.innerHTML);
+            console.log(`DEBUG - Checkmark span exists:`, taskDiv.querySelector('.completed-mark') !== null);
+        }
+
+        // Add drag event listeners
+        taskDiv.addEventListener('dragstart', handleDragStart);
+        taskDiv.addEventListener('dragend', handleDragEnd);
+
+        return taskDiv;
+    }
+
+    function updateTaskCounts() {
+        const statuses = ['todo', 'doing', 'done'];
+        
+        statuses.forEach(status => {
+            const count = tasks.filter(task => task.status === status).length;
+            document.getElementById(`${status}-count`).textContent = count;
+        });
+    }
+
+    function updateStats() {
+        const totalTasks = tasks.length;
+        const totalPoints = tasks.reduce((sum, task) => sum + (task.story_points || 0), 0);
+        const completedTasks = tasks.filter(task => task.status === 'done').length;
+
+        document.getElementById('total-tasks').textContent = totalTasks;
+        document.getElementById('total-points').textContent = totalPoints;
+        document.getElementById('completed-tasks').textContent = completedTasks;
+    }
+
+    function updateProgress() {
+        const totalTasks = tasks.length;
+        const completedTasks = tasks.filter(task => task.status === 'done').length;
+        const progressPercent = totalTasks > 0 ? Math.round((completedTasks / totalTasks) * 100) : 0;
+
+        document.getElementById('progress-fill').style.width = `${progressPercent}%`;
+        document.getElementById('progress-text').textContent = `${progressPercent}% Complete (${completedTasks}/${totalTasks} tasks)`;
+    }
+
+    // Drag and Drop Functions
+    let draggedTask = null;
+
+    function handleDragStart(e) {
+        draggedTask = e.target;
+        e.target.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+    }
+
+    function handleDragEnd(e) {
+        e.target.classList.remove('dragging');
+        draggedTask = null;
+    }
+
+    function allowDrop(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        e.currentTarget.classList.add('drag-over');
+    }
+
+    function dragLeave(e) {
+        e.currentTarget.classList.remove('drag-over');
+    }
+
+    async function drop(e) {
+        e.preventDefault();
+        e.currentTarget.classList.remove('drag-over');
+
+        if (!draggedTask) return;
+
+        const targetList = e.currentTarget;
+        const newStatus = targetList.dataset.status;
+        const taskId = parseInt(draggedTask.dataset.taskId);
+
+        // Find the task in our data
+        const task = tasks.find(t => t.id === taskId);
+        if (!task || task.status === newStatus) return;
+
+        // DEBUG: Log when moving to done
+        console.log(`DEBUG - Moving task "${task.title}" from "${task.status}" to "${newStatus}"`);
+        if (newStatus === 'done') {
+            console.log(`DEBUG - Task being moved TO DONE COLUMN: ${task.title}`);
+        }
+
+        try {
+            // Update task status in backend, preserving all existing data including assignee
+            await updateTask(taskId, { 
+                ...task, 
+                status: newStatus,
+                assignee: ASSIGNEE  // Ensure assignee is preserved
+            });
+        } catch (error) {
+            // Refresh tasks to revert any visual changes
+            await loadTasks();
+        }
+    }
+
+    // Utility Functions
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function showError(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #de350b;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 4px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        `;
+        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+        
+        document.body.appendChild(errorDiv);
+        setTimeout(() => errorDiv.remove(), 5000);
+    }
+
+    function showSuccess(message) {
+        const successDiv = document.createElement('div');
+        successDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #0052cc;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 4px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        `;
+        successDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        
+        document.body.appendChild(successDiv);
+        setTimeout(() => successDiv.remove(), 3000);
+    }
+
+    // Event Handlers
+    async function handleDeleteTask(taskId) {
+        try {
+            await deleteTask(taskId);
+        } catch (error) {
+            // Error already handled in deleteTask function
+        }
+    }
+
+    async function handleSignoffTask(taskId) {
+        if (confirm('Are you sure you want to sign off this task as successfully completed? This will remove it from the sprint board.')) {
+            try {
+                const task = tasks.find(t => t.id === taskId);
+                if (!task) {
+                    throw new Error('Task not found');
+                }
+
+                // Update task status to "signedoff" or "completed" to mark it as officially done
+                await updateTask(taskId, { 
+                    ...task, 
+                    status: 'signedoff',
+                    signoff_date: new Date().toISOString().split('T')[0] // Add sign-off date
+                });
+
+                showSuccess('Task signed off successfully and removed from sprint board');
+                
+                // The task will be removed from the board because it no longer has a status of 'todo', 'doing', or 'done'
+            } catch (error) {
+                console.error('Failed to sign off task:', error);
+                showError('Failed to sign off task');
+            }
+        }
+    }
+
+    // Initialize the application
+    async function init() {
+        console.log(`Initializing ${ASSIGNEE}'s Sprint board...`);
+        await loadTasks();
+        console.log(`${ASSIGNEE}'s Sprint board initialized`);
+    }
+
+    // Make functions globally available
+    window.handleDeleteTask = handleDeleteTask;
+    window.handleSignoffTask = handleSignoffTask;
+    window.allowDrop = allowDrop;
+    window.dragLeave = dragLeave;
+    window.drop = drop;
+
+    // Start the application when DOM is loaded
+    document.addEventListener('DOMContentLoaded', init);
+</script>
+{% endblock %} 

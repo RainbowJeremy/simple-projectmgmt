@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Kanban Project Management{% endblock %}</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Base CSS -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  
+  <!-- Additional CSS -->
+  {% block head %}{% endblock %}
+  
+  <!-- Page-specific styles -->
+  {% block styles %}{% endblock %}
+  
+  <style>
+    /* Navigation Bar Styles */
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .nav-button {
+      padding: 10px 15px;
+      background-color: #0052cc;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .nav-button:hover {
+      background-color: #0747a6;
+    }
+
+    .nav-button.active {
+      background-color: #36b37e;
+    }
+
+    /* Base Body Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fafbfc;
+      padding: 20px;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Common utility classes */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #5e6c84;
+    }
+
+    .error {
+      text-align: center;
+      padding: 20px;
+      color: #de350b;
+      background-color: #ffebe6;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .success {
+      text-align: center;
+      padding: 20px;
+      color: #006644;
+      background-color: #e3fcef;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background-color: #0052cc;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #0747a6;
+    }
+
+    .btn-secondary {
+      background-color: #f4f5f7;
+      color: #5e6c84;
+    }
+
+    .btn-secondary:hover {
+      background-color: #ebecf0;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .nav-buttons {
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      
+      .nav-button {
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+      
+      body {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="nav-buttons">
+    <a href="{{ url_for('home') if url_for else 'index.html' }}" 
+       class="nav-button {% if active_page == 'home' %}active{% endif %}">
+      <i class="fas fa-home"></i> Home
+    </a>
+    <a href="{{ url_for('kpi_dashboard') if url_for else 'kpi.html' }}" 
+       class="nav-button {% if active_page == 'kpi' %}active{% endif %}">
+      <i class="fas fa-chart-line"></i> KPIs
+    </a>
+    <a href="{{ url_for('sprint_board') if url_for else 'mykanban_backend.html' }}" 
+       class="nav-button {% if active_page == 'sprint' %}active{% endif %}">
+      <i class="fas fa-running"></i> Sprint
+    </a>
+    <a href="{{ url_for('product_backlog') if url_for else 'productbacklog_backend.html' }}" 
+       class="nav-button {% if active_page == 'backlog' %}active{% endif %}">
+      <i class="fas fa-list"></i> Backlog
+    </a>
+    <a href="{{ url_for('qr_code') if url_for else 'qr.html' }}" 
+       class="nav-button {% if active_page == 'qr' %}active{% endif %}">
+      <i class="fas fa-qrcode"></i> QR Code
+    </a>
+  </nav>
+
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-messages">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}">
+            {% if category == 'error' %}
+              <i class="fas fa-exclamation-circle"></i>
+            {% elif category == 'success' %}
+              <i class="fas fa-check-circle"></i>
+            {% elif category == 'info' %}
+              <i class="fas fa-info-circle"></i>
+            {% elif category == 'warning' %}
+              <i class="fas fa-exclamation-triangle"></i>
+            {% endif %}
+            {{ message }}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- Main Content -->
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    {% block footer %}{% endblock %}
+  </footer>
+
+  <!-- Base JavaScript -->
+  {% block scripts %}{% endblock %}
+</body>
+</html> 

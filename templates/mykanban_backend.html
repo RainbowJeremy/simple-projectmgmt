@@ -1,0 +1,958 @@
+{% extends "base.html" %}
+
+{% block title %}Sprint Kanban Board - {{ super() }}{% endblock %}
+
+{% block styles %}
+<style>
+    body {
+        background-color: #fafbfc;
+        padding: 20px;
+    }
+
+    /* Consolidated Header */
+    .unified-header {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 20px;
+        border-radius: 8px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+    }
+
+    .header-info {
+        flex: 1;
+        min-width: 250px;
+    }
+
+    .header-info h1 {
+        margin: 0 0 5px 0;
+        font-size: 24px;
+        color: white;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .sprint-details {
+        opacity: 0.9;
+        font-size: 14px;
+        margin-bottom: 8px;
+    }
+
+    .current-board-title {
+        font-size: 16px;
+        font-weight: 600;
+        opacity: 0.95;
+    }
+
+    .header-controls {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        flex-wrap: wrap;
+    }
+
+    .board-tabs {
+        display: flex;
+        gap: 8px;
+        background-color: rgba(255, 255, 255, 0.1);
+        padding: 4px;
+        border-radius: 6px;
+        backdrop-filter: blur(10px);
+    }
+
+    .tab-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 4px;
+        background: transparent;
+        color: rgba(255, 255, 255, 0.8);
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        font-size: 13px;
+    }
+
+    .tab-btn.active {
+        background-color: rgba(255, 255, 255, 0.2);
+        color: white;
+        backdrop-filter: blur(10px);
+    }
+
+    .tab-btn:hover:not(.active) {
+        background-color: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+
+    .save-btn {
+        background-color: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        padding: 8px 16px;
+        border-radius: 4px;
+        cursor: pointer;
+        font-weight: 500;
+        transition: all 0.2s;
+        backdrop-filter: blur(10px);
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .save-btn:hover {
+        background-color: rgba(255, 255, 255, 0.25);
+        border-color: rgba(255, 255, 255, 0.5);
+    }
+
+    .board-container {
+        min-height: 600px;
+    }
+
+    .individual-board,
+    .master-board {
+        display: none;
+    }
+
+    .individual-board.active,
+    .master-board.active {
+        display: block;
+    }
+
+    .kanban-board {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .column {
+        background-color: #ebecf0;
+        border-radius: 8px;
+        width: 300px;
+        min-height: 500px;
+        padding: 15px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .column-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+
+    .column-header h3 {
+        font-size: 16px;
+        color: #5e6c84;
+        font-weight: 600;
+        margin: 0;
+    }
+
+    .count {
+        background-color: #dfe1e6;
+        border-radius: 20px;
+        padding: 2px 8px;
+        font-size: 13px;
+        color: #5e6c84;
+        font-weight: 500;
+    }
+
+    .task-list {
+        min-height: 400px;
+        padding: 5px;
+        border-radius: 4px;
+        transition: background-color 0.2s;
+    }
+
+    .task-list.drag-over {
+        background-color: #e4fcff;
+        border: 2px dashed #00b8d9;
+    }
+
+    .task {
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 12px;
+        margin-bottom: 10px;
+        cursor: grab;
+        position: relative;
+        border-left: 4px solid transparent;
+        transition: all 0.2s;
+    }
+
+    .task:hover {
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .task.dragging {
+        opacity: 0.5;
+        transform: rotate(5deg);
+    }
+
+    .task.priority-high {
+        border-left-color: #de350b;
+    }
+
+    .task.priority-medium {
+        border-left-color: #ff8b00;
+    }
+
+    .task.priority-low {
+        border-left-color: #36b37e;
+    }
+
+    .task-title {
+        font-weight: 500;
+        color: #172b4d;
+        margin-bottom: 8px;
+        line-height: 1.3;
+    }
+
+    .task-description {
+        color: #5e6c84;
+        font-size: 14px;
+        margin-bottom: 8px;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .task-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-size: 12px;
+        color: #6b778c;
+    }
+
+    .task-assignee {
+        font-size: 12px;
+        color: #5e6c84;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+
+    .task-priority {
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-size: 11px;
+        font-weight: 500;
+        text-transform: uppercase;
+    }
+
+    .priority-high {
+        background-color: #ffebe6;
+        color: #de350b;
+    }
+
+    .priority-medium {
+        background-color: #fff4e6;
+        color: #ff8b00;
+    }
+
+    .priority-low {
+        background-color: #e3fcef;
+        color: #00875a;
+    }
+
+    .delete-btn {
+        position: absolute;
+        top: 5px;
+        right: 5px;
+        background: none;
+        border: none;
+        color: #97a0af;
+        cursor: pointer;
+        padding: 2px;
+        border-radius: 3px;
+        font-size: 12px;
+        opacity: 0;
+        transition: all 0.2s;
+    }
+
+    .task:hover .delete-btn {
+        opacity: 1;
+    }
+
+    .delete-btn:hover {
+        background-color: #de350b;
+        color: white;
+    }
+
+    /* Master Board Styles */
+    .master-overview {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 20px;
+        margin-bottom: 30px;
+    }
+
+    .team-summary {
+        background: white;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        border-left: 4px solid;
+    }
+
+    .team-summary.micheal {
+        border-left-color: #36b37e;
+    }
+
+    .team-summary.fintan {
+        border-left-color: #0052cc;
+    }
+
+    .team-summary.jack {
+        border-left-color: #ff8b00;
+    }
+
+    .team-summary h4 {
+        margin: 0 0 15px 0;
+        color: #172b4d;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .team-stats {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 15px;
+    }
+
+    .stat {
+        text-align: center;
+    }
+
+    .stat-number {
+        font-size: 24px;
+        font-weight: bold;
+        color: #172b4d;
+    }
+
+    .stat-label {
+        font-size: 12px;
+        color: #5e6c84;
+        text-transform: uppercase;
+    }
+
+    .progress-bar {
+        background: #f4f5f7;
+        border-radius: 10px;
+        height: 8px;
+        overflow: hidden;
+        margin-top: 10px;
+    }
+
+    .progress-fill {
+        height: 100%;
+        border-radius: 10px;
+        transition: width 0.3s ease;
+    }
+
+    .micheal .progress-fill {
+        background: #36b37e;
+    }
+
+    .fintan .progress-fill {
+        background: #0052cc;
+    }
+
+    .jack .progress-fill {
+        background: #ff8b00;
+    }
+
+    @media (max-width: 768px) {
+        .unified-header {
+            flex-direction: column;
+            align-items: stretch;
+            text-align: center;
+        }
+
+        .header-controls {
+            justify-content: center;
+        }
+
+        .board-tabs {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            flex: 1;
+            min-width: 100px;
+            justify-content: center;
+        }
+
+        .kanban-board {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .column {
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .master-overview {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="unified-header">
+    <div class="header-info">
+        <h1><i class="fas fa-rocket"></i> Sprint Kanban Boards</h1>
+        <div class="sprint-details">Current Sprint: Sprint 1 | Duration: 2 weeks | Team: Development Team Alpha</div>
+        <div class="current-board-title" id="current-board-title">Sprint Master Overview - Track progress across all team members</div>
+    </div>
+    
+    <div class="header-controls">
+        <div class="board-tabs">
+            <button class="tab-btn active" data-board="master" onclick="switchBoard('master')">
+                <i class="fas fa-chart-line"></i> Master
+            </button>
+            <button class="tab-btn" data-board="micheal" onclick="switchBoard('micheal')">
+                <i class="fas fa-user"></i> Micheál
+            </button>
+            <button class="tab-btn" data-board="fintan" onclick="switchBoard('fintan')">
+                <i class="fas fa-user"></i> Fintan
+            </button>
+            <button class="tab-btn" data-board="jack" onclick="switchBoard('jack')">
+                <i class="fas fa-user"></i> Jack
+            </button>
+        </div>
+        <button class="save-btn" onclick="saveBoard()">
+            <i class="fas fa-save"></i> Save
+        </button>
+    </div>
+</div>
+
+<div class="board-container">
+    <!-- Master Overview Board -->
+    <div class="master-board active" id="master-board">
+        <div class="kanban-board">
+            <div class="column">
+                <div class="column-header">
+                    <h3>All To Do</h3>
+                    <span class="count" id="master-todo-count">0</span>
+                </div>
+                <div class="task-list" id="master-todo">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3>All In Progress</h3>
+                    <span class="count" id="master-doing-count">0</span>
+                </div>
+                <div class="task-list" id="master-doing">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3>All Done</h3>
+                    <span class="count" id="master-done-count">0</span>
+                </div>
+                <div class="task-list" id="master-done">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Individual Team Member Boards -->
+    <div class="individual-board" id="micheal-board">
+        <div class="kanban-board">
+            <div class="column">
+                <div class="column-header">
+                    <h3>To Do</h3>
+                    <span class="count" id="micheal-todo-count">0</span>
+                </div>
+                <div class="task-list" data-assignee="micheal" data-status="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3>In Progress</h3>
+                    <span class="count" id="micheal-doing-count">0</span>
+                </div>
+                <div class="task-list" data-assignee="micheal" data-status="doing" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3>Done</h3>
+                    <span class="count" id="micheal-done-count">0</span>
+                </div>
+                <div class="task-list" data-assignee="micheal" data-status="done" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="individual-board" id="fintan-board">
+        <div class="kanban-board">
+            <div class="column">
+                <div class="column-header">
+                    <h3>To Do</h3>
+                    <span class="count" id="fintan-todo-count">0</span>
+                </div>
+                <div class="task-list" data-assignee="fintan" data-status="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3>In Progress</h3>
+                    <span class="count" id="fintan-doing-count">0</span>
+                </div>
+                <div class="task-list" data-assignee="fintan" data-status="doing" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3>Done</h3>
+                    <span class="count" id="fintan-done-count">0</span>
+                </div>
+                <div class="task-list" data-assignee="fintan" data-status="done" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="individual-board" id="jack-board">
+        <div class="kanban-board">
+            <div class="column">
+                <div class="column-header">
+                    <h3>To Do</h3>
+                    <span class="count" id="jack-todo-count">0</span>
+                </div>
+                <div class="task-list" data-assignee="jack" data-status="todo" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3>In Progress</h3>
+                    <span class="count" id="jack-doing-count">0</span>
+                </div>
+                <div class="task-list" data-assignee="jack" data-status="doing" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+            <div class="column">
+                <div class="column-header">
+                    <h3>Done</h3>
+                    <span class="count" id="jack-done-count">0</span>
+                </div>
+                <div class="task-list" data-assignee="jack" data-status="done" ondrop="drop(event)" ondragover="allowDrop(event)">
+                    <!-- Tasks will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Configuration
+    const API_BASE_URL = 'http://localhost:8000/api';
+    
+    // Global state
+    let tasks = [];
+    let currentBoard = 'master';
+    let isConnected = false;
+
+    // API Functions
+    async function apiRequest(endpoint, options = {}) {
+        try {
+            const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...options.headers
+                },
+                ...options
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            return await response.json();
+        } catch (error) {
+            console.error('API Request failed:', error);
+            updateConnectionStatus(false);
+            throw error;
+        }
+    }
+
+    async function loadTasks() {
+        try {
+            console.log('Loading tasks from backend...');
+            tasks = await apiRequest('/tasks');
+            console.log('Loaded tasks:', tasks);
+            renderCurrentBoard();
+            updateConnectionStatus(true);
+        } catch (error) {
+            console.error('Failed to load tasks:', error);
+            showError('Failed to load tasks from backend');
+            updateConnectionStatus(false);
+        }
+    }
+
+    async function updateTask(taskId, updates) {
+        try {
+            const updatedTask = await apiRequest(`/tasks/${taskId}`, {
+                method: 'PUT',
+                body: JSON.stringify(updates)
+            });
+            console.log('Updated task:', updatedTask);
+            await loadTasks(); // Refresh tasks
+            return updatedTask;
+        } catch (error) {
+            console.error('Failed to update task:', error);
+            showError('Failed to update task');
+            throw error;
+        }
+    }
+
+    async function deleteTask(taskId) {
+        try {
+            await apiRequest(`/tasks/${taskId}`, {
+                method: 'DELETE'
+            });
+            console.log('Deleted task:', taskId);
+            await loadTasks(); // Refresh tasks
+        } catch (error) {
+            console.error('Failed to delete task:', error);
+            showError('Failed to delete task');
+            throw error;
+        }
+    }
+
+    // Board Management Functions
+    function switchBoard(boardName) {
+        currentBoard = boardName;
+        
+        // Update tab buttons
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        document.querySelector(`[data-board="${boardName}"]`).classList.add('active');
+        
+        // Update dynamic title
+        const titleElement = document.getElementById('current-board-title');
+        if (boardName === 'master') {
+            titleElement.textContent = 'Sprint Master Overview - Track progress across all team members';
+        } else {
+            const memberName = boardName.charAt(0).toUpperCase() + boardName.slice(1);
+            titleElement.textContent = `${memberName}'s Personal Board - Individual task management`;
+        }
+        
+        // Show/hide boards
+        document.querySelectorAll('.master-board, .individual-board').forEach(board => {
+            board.classList.remove('active');
+        });
+        
+        if (boardName === 'master') {
+            document.getElementById('master-board').classList.add('active');
+        } else {
+            document.getElementById(`${boardName}-board`).classList.add('active');
+        }
+        
+        renderCurrentBoard();
+    }
+
+    function renderCurrentBoard() {
+        if (currentBoard === 'master') {
+            renderMasterBoard();
+        } else {
+            renderIndividualBoard(currentBoard);
+        }
+    }
+
+    function renderMasterBoard() {
+        // Clear all master task lists
+        document.querySelectorAll('#master-board .task-list').forEach(list => {
+            list.innerHTML = '';
+        });
+
+        // Group all tasks by status
+        const tasksByStatus = {
+            todo: tasks.filter(task => task.status === 'todo'),
+            doing: tasks.filter(task => task.status === 'doing'),
+            done: tasks.filter(task => task.status === 'done')
+        };
+
+        // Render tasks in master columns
+        Object.entries(tasksByStatus).forEach(([status, statusTasks]) => {
+            const taskList = document.querySelector(`#master-${status}`);
+            
+            statusTasks.forEach(task => {
+                const taskElement = createTaskElement(task, true);
+                taskList.appendChild(taskElement);
+            });
+        });
+
+        // Update master counts
+        updateMasterCounts();
+    }
+
+    function renderIndividualBoard(assignee) {
+        // Clear all task lists for this board
+        document.querySelectorAll(`#${assignee}-board .task-list`).forEach(list => {
+            list.innerHTML = '';
+        });
+
+        // Filter tasks for this assignee
+        const assigneeTasks = tasks.filter(task => task.assignee === assignee);
+
+        // Group by status
+        const tasksByStatus = {
+            todo: assigneeTasks.filter(task => task.status === 'todo'),
+            doing: assigneeTasks.filter(task => task.status === 'doing'),
+            done: assigneeTasks.filter(task => task.status === 'done')
+        };
+
+        // Render tasks in each column
+        Object.entries(tasksByStatus).forEach(([status, statusTasks]) => {
+            const taskList = document.querySelector(`#${assignee}-board [data-status="${status}"]`);
+            
+            statusTasks.forEach(task => {
+                const taskElement = createTaskElement(task, false);
+                taskList.appendChild(taskElement);
+            });
+        });
+
+        // Update individual board counts
+        updateIndividualCounts(assignee);
+    }
+
+    function createTaskElement(task, isMaster = false) {
+        const taskDiv = document.createElement('div');
+        taskDiv.className = `task priority-${task.priority}`;
+        taskDiv.draggable = true;
+        taskDiv.dataset.taskId = task.id;
+        
+        const assigneeDisplay = isMaster ? `<div class="task-assignee">👤 ${task.assignee || 'Unassigned'}</div>` : '';
+        
+        taskDiv.innerHTML = `
+            <button class="delete-btn" onclick="handleDeleteTask(${task.id})">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="task-title">${escapeHtml(task.title)}</div>
+            ${task.description ? `<div class="task-description">${escapeHtml(task.description)}</div>` : ''}
+            ${assigneeDisplay}
+            <div class="task-meta">
+                <span class="task-priority priority-${task.priority}">${task.priority}</span>
+                <span class="task-points">${task.story_points || 0} pts</span>
+            </div>
+        `;
+
+        // Add drag event listeners
+        taskDiv.addEventListener('dragstart', handleDragStart);
+        taskDiv.addEventListener('dragend', handleDragEnd);
+
+        return taskDiv;
+    }
+
+    function updateMasterCounts() {
+        const statuses = ['todo', 'doing', 'done'];
+        
+        statuses.forEach(status => {
+            const count = document.querySelectorAll(`#master-${status} .task`).length;
+            document.getElementById(`master-${status}-count`).textContent = count;
+        });
+    }
+
+    function updateIndividualCounts(assignee) {
+        const statuses = ['todo', 'doing', 'done'];
+        
+        statuses.forEach(status => {
+            const count = document.querySelectorAll(`#${assignee}-board [data-status="${status}"] .task`).length;
+            document.getElementById(`${assignee}-${status}-count`).textContent = count;
+        });
+    }
+
+    // Drag and Drop Functions
+    let draggedTask = null;
+
+    function handleDragStart(e) {
+        draggedTask = e.target;
+        e.target.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+        e.dataTransfer.setData('text/html', e.target.outerHTML);
+    }
+
+    function handleDragEnd(e) {
+        e.target.classList.remove('dragging');
+        draggedTask = null;
+    }
+
+    function allowDrop(e) {
+        e.preventDefault();
+        e.dataTransfer.dropEffect = 'move';
+        e.currentTarget.classList.add('drag-over');
+    }
+
+    async function drop(e) {
+        e.preventDefault();
+        e.currentTarget.classList.remove('drag-over');
+
+        if (!draggedTask) return;
+
+        const targetList = e.currentTarget;
+        const newStatus = targetList.dataset.status;
+        const newAssignee = targetList.dataset.assignee;
+        const taskId = parseInt(draggedTask.dataset.taskId);
+
+        // Find the task in our data
+        const task = tasks.find(t => t.id === taskId);
+        if (!task) return;
+
+        // Prepare updates
+        const updates = { ...task };
+        let hasChanges = false;
+
+        if (newStatus && task.status !== newStatus) {
+            updates.status = newStatus;
+            hasChanges = true;
+        }
+
+        if (newAssignee && task.assignee !== newAssignee) {
+            updates.assignee = newAssignee;
+            hasChanges = true;
+        }
+
+        if (!hasChanges) return;
+
+        try {
+            // Update task in backend
+            await updateTask(taskId, updates);
+            showSuccess(`Task updated successfully`);
+        } catch (error) {
+            // Refresh tasks to revert any visual changes
+            await loadTasks();
+        }
+    }
+
+    // Utility Functions
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    function updateConnectionStatus(connected) {
+        isConnected = connected;
+        // You can add connection status indicator here if needed
+    }
+
+    function showError(message) {
+        // Create and show error message
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'alert alert-error';
+        errorDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #de350b;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 4px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        `;
+        errorDiv.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+        
+        document.body.appendChild(errorDiv);
+        
+        // Auto-hide after 5 seconds
+        setTimeout(() => errorDiv.remove(), 5000);
+    }
+
+    function showSuccess(message) {
+        // Create and show success message
+        const successDiv = document.createElement('div');
+        successDiv.className = 'alert alert-success';
+        successDiv.style.cssText = `
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #36b37e;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 4px;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+        `;
+        successDiv.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+        
+        document.body.appendChild(successDiv);
+        
+        // Auto-hide after 3 seconds
+        setTimeout(() => successDiv.remove(), 3000);
+    }
+
+    // Event Handlers
+    async function handleDeleteTask(taskId) {
+        try {
+            await deleteTask(taskId);
+        } catch (error) {
+            // Error already handled in deleteTask function
+        }
+    }
+
+    async function saveBoard() {
+        try {
+            showSuccess('Board saved successfully');
+        } catch (error) {
+            showError('Failed to save board');
+        }
+    }
+
+    // Initialize the application
+    async function init() {
+        console.log('Initializing Sprint Kanban boards...');
+        
+        // Load initial data
+        await loadTasks();
+        
+        console.log('Sprint Kanban boards initialized');
+    }
+
+    // Start the application when DOM is loaded
+    document.addEventListener('DOMContentLoaded', init);
+
+    // Make functions globally available
+    window.switchBoard = switchBoard;
+    window.saveBoard = saveBoard;
+    window.handleDeleteTask = handleDeleteTask;
+    window.allowDrop = allowDrop;
+    window.drop = drop;
+</script>
+{% endblock %} 
