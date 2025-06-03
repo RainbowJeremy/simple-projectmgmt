@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Project Management Dashboard - Kanban Project Management</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Base CSS -->
+  <link rel="stylesheet" href="/static/css/main.css">
+  
+  <!-- Additional CSS -->
+  
+<style>
+  .container {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    margin: 0 auto;
+  }
+  
+  h1 {
+    color: #2c3e50;
+    margin-bottom: 30px;
+    text-align: center;
+  }
+  
+  .description {
+    background-color: white;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    margin-bottom: 30px;
+  }
+  
+  .feature-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
+  }
+  
+  .feature-card {
+    background-color: white;
+    padding: 20px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-align: left;
+  }
+  
+  .feature-card h3 {
+    color: #2c3e50;
+    margin-top: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .feature-card ul {
+    padding-left: 20px;
+    margin-bottom: 0;
+  }
+  
+  .feature-card li {
+    margin-bottom: 8px;
+  }
+  
+  .welcome-section {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin: 20px 0;
+  }
+  
+  .stat-card {
+    background-color: white;
+    padding: 15px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .stat-number {
+    font-size: 24px;
+    font-weight: bold;
+    color: #0052cc;
+  }
+  
+  .stat-label {
+    color: #5e6c84;
+    font-size: 14px;
+  }
+</style>
+
+  
+  <!-- Page-specific styles -->
+  
+  
+  <style>
+    /* Navigation Bar Styles */
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .nav-button {
+      padding: 10px 15px;
+      background-color: #0052cc;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .nav-button:hover {
+      background-color: #0747a6;
+    }
+
+    .nav-button.active {
+      background-color: #36b37e;
+    }
+
+    /* Base Body Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fafbfc;
+      padding: 20px;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Common utility classes */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #5e6c84;
+    }
+
+    .error {
+      text-align: center;
+      padding: 20px;
+      color: #de350b;
+      background-color: #ffebe6;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .success {
+      text-align: center;
+      padding: 20px;
+      color: #006644;
+      background-color: #e3fcef;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background-color: #0052cc;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #0747a6;
+    }
+
+    .btn-secondary {
+      background-color: #f4f5f7;
+      color: #5e6c84;
+    }
+
+    .btn-secondary:hover {
+      background-color: #ebecf0;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .nav-buttons {
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      
+      .nav-button {
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+      
+      body {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="nav-buttons">
+    <a href="/" 
+       class="nav-button active">
+      <i class="fas fa-home"></i> Home
+    </a>
+    <a href="/kpi" 
+       class="nav-button ">
+      <i class="fas fa-chart-line"></i> KPIs
+    </a>
+    <a href="/sprint" 
+       class="nav-button ">
+      <i class="fas fa-running"></i> Sprint
+    </a>
+    <a href="/backlog" 
+       class="nav-button ">
+      <i class="fas fa-list"></i> Backlog
+    </a>
+    <a href="/qr" 
+       class="nav-button ">
+      <i class="fas fa-qrcode"></i> QR Code
+    </a>
+  </nav>
+
+  <!-- Flash Messages -->
+  
+    
+  
+
+  <!-- Main Content -->
+  <main>
+    
+<div class="container">
+  <h1><i class="fas fa-tachometer-alt"></i> Project Management Dashboard</h1>
+  
+  <div class="welcome-section">
+    <div class="description">
+      <h2>Welcome to Your Project Management Hub</h2>
+      <p>Access all your project management tools in one place. Track KPIs, manage sprints, organize your backlog, and generate QR codes.</p>
+      
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">25</div>
+          <div class="stat-label">Total Tasks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">17</div>
+          <div class="stat-label">Sprint Tasks</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">29</div>
+          <div class="stat-label">Backlog Items</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">7</div>
+          <div class="stat-label">Completed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="feature-grid">
+    <div class="feature-card">
+      <h3><i class="fas fa-chart-line" style="color: #0052cc;"></i> KPI Dashboard</h3>
+      <ul>
+        <li>Track key performance indicators</li>
+        <li>Monitor revenue trends</li>
+        <li>View customer metrics</li>
+        <li>Analyze conversion rates</li>
+      </ul>
+      <div style="margin-top: 15px;">
+        <a href="/kpi" class="btn btn-primary">
+          <i class="fas fa-arrow-right"></i> View KPIs
+        </a>
+      </div>
+    </div>
+    
+    <div class="feature-card">
+      <h3><i class="fas fa-running" style="color: #ff8b00;"></i> Sprint Board</h3>
+      <ul>
+        <li>Manage tasks in To Do, Doing, and Done columns</li>
+        <li>Track DEEP criteria for each task</li>
+        <li>Handle sprint planning</li>
+        <li>Drag and drop tasks between columns</li>
+      </ul>
+      <div style="margin-top: 15px;">
+        <a href="/sprint" class="btn btn-primary">
+          <i class="fas fa-arrow-right"></i> Open Sprint
+        </a>
+      </div>
+    </div>
+    
+    <div class="feature-card">
+      <h3><i class="fas fa-list" style="color: #36b37e;"></i> Product Backlog</h3>
+      <ul>
+        <li>View and manage product backlog items</li>
+        <li>Set priorities and estimates</li>
+        <li>Track item status</li>
+        <li>Request items for sprint</li>
+      </ul>
+      <div style="margin-top: 15px;">
+        <a href="/backlog" class="btn btn-primary">
+          <i class="fas fa-arrow-right"></i> Manage Backlog
+        </a>
+      </div>
+    </div>
+    
+    <div class="feature-card">
+      <h3><i class="fas fa-qrcode" style="color: #de350b;"></i> QR Code Generator</h3>
+      <ul>
+        <li>Generate QR codes for any text</li>
+        <li>Download QR code images</li>
+        <li>Share links and information easily</li>
+        <li>Perfect for project sharing</li>
+      </ul>
+      <div style="margin-top: 15px;">
+        <a href="/qr" class="btn btn-primary">
+          <i class="fas fa-arrow-right"></i> Generate QR
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    
+  </footer>
+
+  <!-- Base JavaScript -->
+  
+<script>
+  console.log('Project Management Dashboard loaded');
+  
+  // Optional: Add some interactivity or animations
+  document.addEventListener('DOMContentLoaded', function() {
+    // Animate stat numbers on load
+    const statNumbers = document.querySelectorAll('.stat-number');
+    statNumbers.forEach(stat => {
+      const finalValue = parseInt(stat.textContent);
+      let currentValue = 0;
+      const increment = Math.ceil(finalValue / 20);
+      
+      const timer = setInterval(() => {
+        currentValue += increment;
+        if (currentValue >= finalValue) {
+          stat.textContent = finalValue;
+          clearInterval(timer);
+        } else {
+          stat.textContent = currentValue;
+        }
+      }, 50);
+    });
+  });
+</script>
+
+</body>
+</html> 

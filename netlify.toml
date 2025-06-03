@@ -1,10 +1,30 @@
 [build]
   publish = "."
-  command = "pip install -r requirements.txt"
+  command = "pip install -r requirements.txt && python generate_static.py"
 
 [build.environment]
   PYTHON_VERSION = "3.9"
   SHEETDB_API_URL = ""
+
+[[redirects]]
+  from = "/sprint"
+  to = "/sprint.html"
+  status = 200
+
+[[redirects]]
+  from = "/kpi"
+  to = "/kpi.html"
+  status = 200
+
+[[redirects]]
+  from = "/backlog"
+  to = "/backlog.html"
+  status = 200
+
+[[redirects]]
+  from = "/qr"
+  to = "/qr.html"
+  status = 200
 
 [[redirects]]
   from = "/*"

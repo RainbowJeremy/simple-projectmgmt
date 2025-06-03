@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QR Code Creator - Kanban Project Management</title>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Base CSS -->
+  <link rel="stylesheet" href="/static/css/main.css">
+  
+  <!-- Additional CSS -->
+  
+  
+  <!-- Page-specific styles -->
+  
+<style>
+    :root {
+        --primary-color: #2563eb;
+        --secondary-color: #4338ca;
+        --accent-color: #0ea5e9;
+        --light-color: #f3f4f6;
+        --dark-color: #1e293b;
+        --success-color: #10b981;
+        --warning-color: #f59e0b;
+        --error-color: #ef4444;
+    }
+    
+    .container {
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+    
+    h1 {
+        color: var(--dark-color);
+        margin-bottom: 0.5rem;
+        font-size: 2.5rem;
+    }
+    
+    .subheading {
+        color: #6b7280;
+        font-size: 1.1rem;
+    }
+    
+    .card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05), 0 1px 3px rgba(0, 0, 0, 0.1);
+        padding: 1.5rem;
+        margin-bottom: 2rem;
+    }
+    
+    .controls {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    @media (min-width: 768px) {
+        .controls {
+            grid-template-columns: 2fr 1fr 1fr;
+        }
+    }
+    
+    .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    label {
+        font-weight: 600;
+        font-size: 0.9rem;
+        color: #4b5563;
+    }
+    
+    input, select {
+        padding: 0.75rem;
+        border: 1px solid #d1d5db;
+        border-radius: 6px;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    
+    input:focus, select:focus {
+        border-color: var(--accent-color);
+        box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.2);
+    }
+    
+    .buttons {
+        display: flex;
+        gap: 1rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .btn {
+        padding: 0.75rem 1.5rem;
+        border: none;
+        border-radius: 6px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.2s;
+        font-size: 1rem;
+    }
+    
+    .btn-primary {
+        background-color: var(--primary-color);
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background-color: var(--secondary-color);
+    }
+    
+    .btn-secondary {
+        background-color: var(--accent-color);
+        color: white;
+    }
+    
+    .btn-secondary:hover {
+        background-color: #0284c7;
+    }
+    
+    .grid-container {
+        max-width: 100%;
+        overflow: auto;
+        margin-bottom: 1.5rem;
+    }
+    
+    .qr-grid {
+        border-collapse: collapse;
+        margin: 0 auto;
+    }
+    
+    .qr-cell {
+        width: 14px;
+        height: 14px;
+        border: 1px solid #e5e7eb;
+        cursor: pointer;
+        background-color: white;
+    }
+    
+    .qr-cell.dark {
+        background-color: black;
+    }
+    
+    .qr-cell.editable {
+        background-color: #e0f7fa;
+    }
+    
+    .qr-cell.editable.dark {
+        background-color: black;
+    }
+    
+    .qr-cell.fixed {
+        cursor: not-allowed;
+    }
+    
+    .output {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 2rem;
+    }
+    
+    .output img {
+        margin-bottom: 1rem;
+        max-width: 300px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    
+    .download-btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        background-color: var(--success-color);
+        color: white;
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: background-color 0.2s;
+    }
+    
+    .download-btn:hover {
+        background-color: #059669;
+    }
+    
+    .info-section {
+        margin-top: 1rem;
+    }
+    
+    h3 {
+        color: var(--dark-color);
+        margin-bottom: 0.75rem;
+    }
+    
+    ul, ol {
+        padding-left: 1.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    li {
+        margin-bottom: 0.5rem;
+    }
+</style>
+
+  
+  <style>
+    /* Navigation Bar Styles */
+    .nav-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-bottom: 20px;
+    }
+
+    .nav-button {
+      padding: 10px 15px;
+      background-color: #0052cc;
+      color: white;
+      text-decoration: none;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: background-color 0.2s;
+    }
+
+    .nav-button:hover {
+      background-color: #0747a6;
+    }
+
+    .nav-button.active {
+      background-color: #36b37e;
+    }
+
+    /* Base Body Styles */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #fafbfc;
+      padding: 20px;
+      margin: 0;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    /* Common utility classes */
+    .loading {
+      text-align: center;
+      padding: 40px;
+      color: #5e6c84;
+    }
+
+    .error {
+      text-align: center;
+      padding: 20px;
+      color: #de350b;
+      background-color: #ffebe6;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .success {
+      text-align: center;
+      padding: 20px;
+      color: #006644;
+      background-color: #e3fcef;
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .btn {
+      padding: 8px 12px;
+      border: none;
+      border-radius: 3px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      transition: background-color 0.2s;
+      text-decoration: none;
+      display: inline-block;
+    }
+
+    .btn-primary {
+      background-color: #0052cc;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #0747a6;
+    }
+
+    .btn-secondary {
+      background-color: #f4f5f7;
+      color: #5e6c84;
+    }
+
+    .btn-secondary:hover {
+      background-color: #ebecf0;
+    }
+
+    /* Responsive design */
+    @media (max-width: 768px) {
+      .nav-buttons {
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      
+      .nav-button {
+        padding: 8px 10px;
+        font-size: 14px;
+      }
+      
+      body {
+        padding: 10px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="nav-buttons">
+    <a href="/" 
+       class="nav-button ">
+      <i class="fas fa-home"></i> Home
+    </a>
+    <a href="/kpi" 
+       class="nav-button ">
+      <i class="fas fa-chart-line"></i> KPIs
+    </a>
+    <a href="/sprint" 
+       class="nav-button ">
+      <i class="fas fa-running"></i> Sprint
+    </a>
+    <a href="/backlog" 
+       class="nav-button ">
+      <i class="fas fa-list"></i> Backlog
+    </a>
+    <a href="/qr" 
+       class="nav-button active">
+      <i class="fas fa-qrcode"></i> QR Code
+    </a>
+  </nav>
+
+  <!-- Flash Messages -->
+  
+    
+  
+
+  <!-- Main Content -->
+  <main>
+    
+<div class="container">
+    <header>
+        <h1>Interactive QR Code Creator</h1>
+        <p class="subheading">Generate, customize, and download QR codes for any URL</p>
+    </header>
+    
+    <div class="card">
+        <div class="controls">
+            <div class="control-group">
+                <label for="url-input">URL or Text</label>
+                <input type="text" id="url-input" placeholder="https://example.com" value="https://example.com">
+            </div>
+            <div class="control-group">
+                <label for="qr-version">QR Version</label>
+                <select id="qr-version">
+                    <option value="1">Version 1 (21×21)</option>
+                    <option value="2" selected>Version 2 (25×25)</option>
+                    <option value="3">Version 3 (29×29)</option>
+                    <option value="4">Version 4 (33×33)</option>
+                    <option value="5">Version 5 (37×37)</option>
+                    <option value="6">Version 6 (41×41)</option>
+                </select>
+            </div>
+            <div class="control-group">
+                <label for="error-correction">Error Correction</label>
+                <select id="error-correction">
+                    <option value="L">Level L (7%)</option>
+                    <option value="M">Level M (15%)</option>
+                    <option value="Q" selected>Level Q (25%)</option>
+                    <option value="H">Level H (30%)</option>
+                </select>
+            </div>
+        </div>
+        
+        <div class="buttons">
+            <button id="generate-btn" class="btn btn-primary">Generate QR Code</button>
+            <button id="export-btn" class="btn btn-secondary">Export QR Code</button>
+        </div>
+        
+        <div class="grid-container">
+            <table id="qr-grid" class="qr-grid"></table>
+        </div>
+        
+        <div id="output" class="output"></div>
+    </div>
+
+    <div class="card">
+        <div class="info-section">
+            <h3>How to Use</h3>
+            <ol>
+                <li><strong>Enter your content:</strong> Type any text, URL, or data you want to encode</li>
+                <li><strong>Choose settings:</strong> Select QR version and error correction level</li>
+                <li><strong>Generate:</strong> Click "Generate QR Code" to create your code</li>
+                <li><strong>Edit (optional):</strong> Click on editable cells to customize</li>
+                <li><strong>Export:</strong> Save your QR code as a PNG image</li>
+            </ol>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="info-section">
+            <h3>Error Correction Levels</h3>
+            <ul>
+                <li><strong>Level L (7%):</strong> Smallest QR code, can recover from 7% damage</li>
+                <li><strong>Level M (15%):</strong> Balanced size and error recovery</li>
+                <li><strong>Level Q (25%):</strong> Good error recovery for damaged codes</li>
+                <li><strong>Level H (30%):</strong> Maximum error recovery, larger code size</li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    
+  </footer>
+
+  <!-- Base JavaScript -->
+  
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<script>
+    // QR Code sizes for each version
+    const QR_VERSIONS = {
+        1: 21,
+        2: 25,
+        3: 29,
+        4: 33,
+        5: 37,
+        6: 41
+    };
+    
+    // Store current grid state
+    let qrGrid = [];
+    let currentSize = QR_VERSIONS[2]; // Default to Version 2
+    
+    // Initialize the grid
+    function initializeGrid() {
+        qrGrid = [];
+        for (let i = 0; i < currentSize; i++) {
+            qrGrid[i] = [];
+            for (let j = 0; j < currentSize; j++) {
+                qrGrid[i][j] = 0;
+            }
+        }
+    }
+    
+    // Create visual grid
+    function createGrid() {
+        const gridElement = document.getElementById('qr-grid');
+        gridElement.innerHTML = '';
+        
+        for (let i = 0; i < currentSize; i++) {
+            const row = document.createElement('tr');
+            
+            for (let j = 0; j < currentSize; j++) {
+                const cell = document.createElement('td');
+                cell.className = `qr-cell ${qrGrid[i][j] === 1 ? 'dark' : ''}`;
+                cell.dataset.row = i;
+                cell.dataset.col = j;
+                
+                // Add event listener for clicking cells
+                cell.addEventListener('click', function() {
+                    const row = parseInt(this.dataset.row);
+                    const col = parseInt(this.dataset.col);
+                    
+                    // Only allow editing non-fixed cells
+                    if (!isFixedPatternCell(row, col)) {
+                        qrGrid[row][col] = qrGrid[row][col] === 1 ? 0 : 1;
+                        this.classList.toggle('dark');
+                    }
+                });
+                
+                row.appendChild(cell);
+            }
+            
+            gridElement.appendChild(row);
+        }
+        
+        highlightEditableCells();
+    }
+    
+    // Check if a cell is part of a fixed pattern
+    function isFixedPatternCell(row, col) {
+        const size = currentSize;
+        
+        // Position markers (corners)
+        if ((row < 7 && col < 7) || 
+            (row < 7 && col >= size - 7) || 
+            (row >= size - 7 && col < 7)) {
+            return true;
+        }
+        
+        // Timing patterns
+        if (row === 6 || col === 6) {
+            return true;
+        }
+        
+        // Format information
+        if ((row < 9 && col === 8) || (row === 8 && col < 9) || 
+            (row === 8 && col >= size - 8) || (row >= size - 8 && col === 8)) {
+            return true;
+        }
+        
+        // Alignment patterns (for Version 2+)
+        if (size > 21) {
+            const alignmentPositions = getAlignmentPatternPositions(size);
+            
+            for (let i = 0; i < alignmentPositions.length; i++) {
+                const centerX = alignmentPositions[i];
+                const centerY = alignmentPositions[i];
+                
+                // Skip positions that overlap with finder patterns
+                if ((centerX < 8 && centerY < 8) || 
+                    (centerX < 8 && centerY >= size - 8) || 
+                    (centerX >= size - 8 && centerY < 8)) {
+                    continue;
+                }
+                
+                // Check if within alignment pattern (5x5)
+                if (Math.abs(row - centerY) <= 2 && Math.abs(col - centerX) <= 2) {
+                    return true;
+                }
+            }
+        }
+        
+        return false;
+    }
+    
+    // Get alignment pattern positions based on QR version
+    function getAlignmentPatternPositions(size) {
+        const version = Object.keys(QR_VERSIONS).find(v => QR_VERSIONS[v] === size);
+        
+        switch (parseInt(version)) {
+            case 2: return [18];
+            case 3: return [22];
+            case 4: return [26];
+            case 5: return [30];
+            case 6: return [34];
+            default: return [];
+        }
+    }
+    
+    // Highlight editable cells
+    function highlightEditableCells() {
+        const cells = document.querySelectorAll('.qr-cell');
+        
+        cells.forEach(cell => {
+            const row = parseInt(cell.dataset.row);
+            const col = parseInt(cell.dataset.col);
+            
+            if (isFixedPatternCell(row, col)) {
+                cell.classList.add('fixed');
+            } else {
+                cell.classList.add('editable');
+            }
+        });
+    }
+    
+    // Generate QR code from input
+    function generateQRCode() {
+        const input = document.getElementById('url-input').value.trim();
+        if (!input) {
+            alert('Please enter a URL or text');
+            return;
+        }
+        
+        const version = document.getElementById('qr-version').value;
+        const errorLevel = document.getElementById('error-correction').value;
+        
+        currentSize = QR_VERSIONS[version];
+        
+        try {
+            // Generate QR code using library
+            const qr = qrcode(version, errorLevel);
+            qr.addData(input);
+            qr.make();
+            
+            // Update grid from QR code
+            qrGrid = [];
+            for (let i = 0; i < currentSize; i++) {
+                qrGrid[i] = [];
+                for (let j = 0; j < currentSize; j++) {
+                    qrGrid[i][j] = qr.isDark(i, j) ? 1 : 0;
+                }
+            }
+            
+            // Recreate visual grid
+            createGrid();
+            
+            // Show preview
+            const outputDiv = document.getElementById('output');
+            outputDiv.innerHTML = '';
+            
+            const img = document.createElement('img');
+            img.src = qr.createDataURL(4);
+            img.alt = 'Generated QR Code';
+            
+            outputDiv.appendChild(img);
+        } catch (error) {
+            alert(`Error generating QR code: ${error.message}\nTry a higher version or lower error correction level.`);
+        }
+    }
+    
+    // Export QR code as image
+    function exportQRCode() {
+        const canvas = document.createElement('canvas');
+        const scale = 10; // Scale for better quality
+        
+        canvas.width = currentSize * scale;
+        canvas.height = currentSize * scale;
+        
+        const ctx = canvas.getContext('2d');
+        
+        // Fill background
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        
+        // Draw QR code
+        ctx.fillStyle = 'black';
+        for (let i = 0; i < currentSize; i++) {
+            for (let j = 0; j < currentSize; j++) {
+                if (qrGrid[i][j] === 1) {
+                    ctx.fillRect(j * scale, i * scale, scale, scale);
+                }
+            }
+        }
+        
+        // Create download link
+        const dataURL = canvas.toDataURL('image/png');
+        
+        const outputDiv = document.getElementById('output');
+        
+        // Create new image and download link
+        const img = document.createElement('img');
+        img.src = dataURL;
+        img.alt = 'Exported QR Code';
+        
+        const downloadLink = document.createElement('a');
+        downloadLink.href = dataURL;
+        downloadLink.download = 'custom-qrcode.png';
+        downloadLink.className = 'download-btn';
+        downloadLink.textContent = 'Download QR Code';
+        
+        // Clear and update output
+        outputDiv.innerHTML = '';
+        outputDiv.appendChild(img);
+        outputDiv.appendChild(downloadLink);
+    }
+    
+    // Event listeners
+    document.getElementById('generate-btn').addEventListener('click', generateQRCode);
+    document.getElementById('export-btn').addEventListener('click', exportQRCode);
+    
+    // Handle version change
+    document.getElementById('qr-version').addEventListener('change', function() {
+        const version = this.value;
+        currentSize = QR_VERSIONS[version];
+        initializeGrid();
+        createGrid();
+    });
+    
+    // Initialize on page load
+    document.addEventListener('DOMContentLoaded', function() {
+        initializeGrid();
+        createGrid();
+        generateQRCode(); // Generate default QR code on load
+    });
+</script>
+
+</body>
+</html> 
