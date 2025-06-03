@@ -1,0 +1,698 @@
+[
+  {
+    "id": 61,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 62,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 63,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
+    "id": 64,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 65,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 66,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
+    "id": 67,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 68,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 69,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
+    "id": 70,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 71,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 72,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
+    "id": 73,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 74,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 75,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
+    "id": 76,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 77,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 78,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
+    "id": 79,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 80,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 81,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
+    "id": 82,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 83,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 84,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
+    "id": 85,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 86,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 87,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
+    "id": 1,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 2,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 3,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 4,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 5,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 6,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 7,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 8,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 9,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 10,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 11,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 12,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 13,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 14,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 15,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 16,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 17,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 18,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 19,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 20,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 21,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 22,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 23,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 24,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 25,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 26,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 27,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 28,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 29,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 30,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 31,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 32,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 33,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 34,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 35,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 36,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 37,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 38,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 39,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 40,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 41,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 42,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 43,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 44,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 45,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 46,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 47,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 48,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 49,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 50,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 51,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 52,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 53,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 54,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 55,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 56,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 57,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  },
+  {
+    "id": 58,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-05-26",
+    "category": "financial"
+  },
+  {
+    "id": 59,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-05-26",
+    "category": "customer"
+  },
+  {
+    "id": 60,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-05-26",
+    "category": "marketing"
+  }
+]
