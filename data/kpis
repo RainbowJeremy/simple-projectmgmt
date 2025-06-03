@@ -216,6 +216,54 @@
     "category": "marketing"
   },
   {
+    "id": 88,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 89,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 90,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
+    "id": 91,
+    "metric_name": "Revenue",
+    "value": 45000.0,
+    "target_value": 50000.0,
+    "date": "2025-06-03",
+    "category": "financial"
+  },
+  {
+    "id": 92,
+    "metric_name": "Customer Satisfaction",
+    "value": 4.2,
+    "target_value": 4.5,
+    "date": "2025-06-03",
+    "category": "customer"
+  },
+  {
+    "id": 93,
+    "metric_name": "Conversion Rate",
+    "value": 2.8,
+    "target_value": 3.5,
+    "date": "2025-06-03",
+    "category": "marketing"
+  },
+  {
     "id": 1,
     "metric_name": "Revenue",
     "value": 45000.0,

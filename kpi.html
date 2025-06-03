@@ -287,5 +287,71 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-sparklines/2.1.2/jquery.sparkline.min.js"></script>
 <script src="/static/js/script.js"></script>
 
-</body>
+
+    <script>
+    // Static Site Read-Only Mode
+    function showReadOnlyNotice(action) {
+        alert(`This is a read-only static version of the site.\n\n` +
+              `Cannot ${action} in static mode.\n\n` +
+              `For full functionality, please run the Flask app locally or deploy to a platform that supports Python backends (like Render.com, Railway.app, or Heroku).`);
+    }
+    
+    // Override modification functions
+    window.updateTask = () => showReadOnlyNotice('update tasks');
+    window.deleteTask = () => showReadOnlyNotice('delete tasks');
+    window.handleDeleteTask = () => showReadOnlyNotice('delete tasks');
+    window.addTask = () => showReadOnlyNotice('add tasks');
+    window.addBacklogItem = () => showReadOnlyNotice('add backlog items');
+    window.updateBacklogItem = () => showReadOnlyNotice('update backlog items');
+    window.deleteBacklogItem = () => showReadOnlyNotice('delete backlog items');
+    window.addKPI = () => showReadOnlyNotice('add KPIs');
+    
+    // Disable form submissions
+    document.addEventListener('DOMContentLoaded', function() {
+        // Add read-only banner
+        const banner = document.createElement('div');
+        banner.style.cssText = `
+            background: #f39c12;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        `;
+        banner.innerHTML = '📖 READ-ONLY MODE: This is a static demo. No data can be modified.';
+        document.body.insertBefore(banner, document.body.firstChild);
+        
+        // Adjust body padding to account for banner
+        document.body.style.paddingTop = '50px';
+        
+        // Disable all forms
+        const forms = document.querySelectorAll('form');
+        forms.forEach(form => {
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                showReadOnlyNotice('submit forms');
+            });
+        });
+        
+        // Disable all buttons that modify data
+        const modifyButtons = document.querySelectorAll(
+            'button[onclick*="delete"], button[onclick*="add"], button[onclick*="update"], ' +
+            'button[onclick*="edit"], .delete-btn, .add-btn, .edit-btn'
+        );
+        modifyButtons.forEach(button => {
+            button.style.opacity = '0.5';
+            button.style.cursor = 'not-allowed';
+            button.onclick = (e) => {
+                e.preventDefault();
+                showReadOnlyNotice('modify data');
+            };
+        });
+    });
+    </script>
+    </body>
 </html> 

@@ -264,6 +264,28 @@
     "updated_date": "2025-06-03"
   },
   {
+    "id": 77,
+    "title": "Dashboard Analytics",
+    "description": "Real-time analytics dashboard",
+    "priority": 2,
+    "story_points": 8,
+    "status": "new",
+    "epic": "Analytics",
+    "created_date": "2025-06-03",
+    "updated_date": "2025-06-03"
+  },
+  {
+    "id": 79,
+    "title": "Dashboard Analytics",
+    "description": "Real-time analytics dashboard",
+    "priority": 2,
+    "story_points": 8,
+    "status": "new",
+    "epic": "Analytics",
+    "created_date": "2025-06-03",
+    "updated_date": "2025-06-03"
+  },
+  {
     "id": 58,
     "title": "User Registration",
     "description": "Allow users to create accounts",
@@ -353,6 +375,28 @@
   },
   {
     "id": 74,
+    "title": "User Registration",
+    "description": "Allow users to create accounts",
+    "priority": 1,
+    "story_points": 5,
+    "status": "new",
+    "epic": "Authentication",
+    "created_date": "2025-06-03",
+    "updated_date": "2025-06-03"
+  },
+  {
+    "id": 76,
+    "title": "User Registration",
+    "description": "Allow users to create accounts",
+    "priority": 1,
+    "story_points": 5,
+    "status": "new",
+    "epic": "Authentication",
+    "created_date": "2025-06-03",
+    "updated_date": "2025-06-03"
+  },
+  {
+    "id": 78,
     "title": "User Registration",
     "description": "Allow users to create accounts",
     "priority": 1,
