@@ -6,9 +6,6 @@
   PYTHON_VERSION = "3.9"
   SHEETDB_API_URL = ""
 
-[[plugins]]
-  package = "./netlify-plugin-env-replace"
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
