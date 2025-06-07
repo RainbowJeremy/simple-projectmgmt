@@ -164,6 +164,30 @@ def init_db():
         logger.error(f"💥 Database initialization failed: {str(e)}")
         raise
 
+def convert_priority_to_int(priority):
+    """Convert text priority values to integers"""
+    if isinstance(priority, int):
+        return priority
+    
+    if isinstance(priority, str):
+        priority_lower = priority.lower()
+        if priority_lower == 'low':
+            return 1
+        elif priority_lower == 'medium':
+            return 2
+        elif priority_lower == 'high':
+            return 3
+        elif priority_lower == 'critical':
+            return 4
+        else:
+            # Try to convert to int if it's a number string
+            try:
+                return int(priority)
+            except (ValueError, TypeError):
+                return 2  # Default to medium priority
+    
+    return 2  # Default fallback
+
 # Template Routes
 @app.route('/home')
 @app.route('/')
@@ -539,7 +563,7 @@ def add_backlog_item():
         cur = conn.cursor()
         cur.execute(
             'INSERT INTO backlog_items (title, description, priority, story_points, status, epic) VALUES (%s, %s, %s, %s, %s, %s)',
-            (data['title'], data.get('description', ''), data.get('priority', 0),
+            (data['title'], data.get('description', ''), convert_priority_to_int(data.get('priority')),
              data.get('story_points', 0), data.get('status', 'new'), data.get('epic', ''))
         )
         conn.commit()
@@ -548,7 +572,7 @@ def add_backlog_item():
         # SQLite
         conn.execute(
             'INSERT INTO backlog_items (title, description, priority, story_points, status, epic) VALUES (?, ?, ?, ?, ?, ?)',
-            (data['title'], data.get('description', ''), data.get('priority', 0),
+            (data['title'], data.get('description', ''), convert_priority_to_int(data.get('priority')),
              data.get('story_points', 0), data.get('status', 'new'), data.get('epic', ''))
         )
         conn.commit()
@@ -568,7 +592,7 @@ def update_backlog_item(item_id):
         cur.execute(
             '''UPDATE backlog_items SET title=%s, description=%s, priority=%s, 
                story_points=%s, status=%s, epic=%s, updated_date=CURRENT_DATE WHERE id=%s''',
-            (data['title'], data.get('description', ''), data.get('priority', 0),
+            (data['title'], data.get('description', ''), convert_priority_to_int(data.get('priority')),
              data.get('story_points', 0), data.get('status', 'new'), 
              data.get('epic', ''), item_id)
         )
@@ -579,7 +603,7 @@ def update_backlog_item(item_id):
         conn.execute(
             '''UPDATE backlog_items SET title=?, description=?, priority=?, 
                story_points=?, status=?, epic=?, updated_date=CURRENT_DATE WHERE id=?''',
-            (data['title'], data.get('description', ''), data.get('priority', 0),
+            (data['title'], data.get('description', ''), convert_priority_to_int(data.get('priority')),
              data.get('story_points', 0), data.get('status', 'new'), 
              data.get('epic', ''), item_id)
         )
